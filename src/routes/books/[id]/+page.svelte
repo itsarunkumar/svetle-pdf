@@ -1,0 +1,19 @@
+<script>
+	import PDF from '$lib/components/PDF.svelte';
+	export let data;
+
+	import { page } from '$app/stores';
+
+	console.log(
+		'page',
+		$page.data.data.find((/** @type {{ id: string; }} */ item) => item.id === $page.params.id)
+	);
+
+	let url = $page.data.data.find(
+		(/** @type {{ id: string; }} */ item) => item.id === $page.params.id
+	).url;
+</script>
+
+<div class="w-full flex justify-center items-center flex-col py-10">
+	<PDF {url} />
+</div>
