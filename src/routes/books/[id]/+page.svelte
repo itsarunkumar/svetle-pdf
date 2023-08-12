@@ -6,10 +6,10 @@
 
 	console.log(
 		'page',
-		$page.data.data.find((/** @type {{ id: string; }} */ item) => item.id === $page.params.id)
+		$page.data.user.files.find((/** @type {{ id: string; }} */ item) => item.id === $page.params.id)
 	);
 
-	let url = $page.data.data.find(
+	let url = $page.data.user.files.find(
 		(/** @type {{ id: string; }} */ item) => item.id === $page.params.id
 	).url;
 </script>

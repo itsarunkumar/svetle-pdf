@@ -1,6 +1,5 @@
 <script>
 	/** @type {import('./$types').LayoutData} */
-	export let data;
 
 	import '../app.css';
 	// Your selected Skeleton theme:
@@ -8,19 +7,23 @@
 
 	// This contains the bulk of Skeletons required styles:
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
-
-	import { LightSwitch } from '@skeletonlabs/skeleton';
 	import Navbar from '$lib/components/Navbar.svelte';
 
-	import { page } from '$app/stores';
+	import { navigating } from '$app/stores';
 
-	// console.log('page from layout', $page);
+	export let data;
+
+	$: ({ logedIn } = data);
 </script>
 
 <svelte:head>
 	<title>haha</title>
 </svelte:head>
 
-<Navbar />
+<Navbar {logedIn} />
 
-<slot />
+{#if $navigating}
+	<p>Loading....</p>
+{:else}
+	<slot />
+{/if}
