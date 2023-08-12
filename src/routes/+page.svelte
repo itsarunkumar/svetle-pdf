@@ -1,2 +1,8 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<!-- src/routes/+page.svelte -->
+<script>
+	export let data;
+</script>
+
+<div class="row flex-center flex">
+	<div class="col-6 form-widget">Home</div>
+</div>

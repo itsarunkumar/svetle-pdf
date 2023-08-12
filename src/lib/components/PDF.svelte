@@ -73,7 +73,7 @@
 	}
 </script>
 
-<div class="w-full h-fit flex justify-center items-center flex-col sm:flex-col">
+<div class=" h-fit flex justify-center items-center flex-col sm:flex-col">
 	<canvas bind:this={canvas} id="the-canvas" class="lg:w-full w-screen lg:h-full h-fit" />
 	<div class="mt-5">
 		<button
