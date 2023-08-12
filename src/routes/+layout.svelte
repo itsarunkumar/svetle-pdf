@@ -9,13 +9,21 @@
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import Navbar from '$lib/components/Navbar.svelte';
 
+	import { navigating } from '$app/stores';
+
 	export let data;
+
+	$: ({ logedIn } = data);
 </script>
 
 <svelte:head>
 	<title>haha</title>
 </svelte:head>
 
-<Navbar logedIn={data.logedIn} />
+<Navbar {logedIn} />
 
-<slot />
+{#if $navigating}
+	<p>Loading....</p>
+{:else}
+	<slot />
+{/if}

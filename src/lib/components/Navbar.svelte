@@ -7,20 +7,21 @@
 </script>
 
 <nav class="bg-green-400 flex items-center justify-between h-16 px-4">
-	<span>Reda</span>
-	<div class="flex items-center justify-between">
+	<a href="/" class="uppercase text-2xl"> reda </a>
+
+	<div class="flex items-center justify-between gap-5">
 		<LightSwitch />
 
-		<div>
-			<a href="/books" class="btn">Go to Books</a>
+		<div class="flex gap-4">
+			<a href="/books">Go to Books</a>
 			<a href="/">Home</a>
 
 			{#if logedIn}
-				<form action="?/logout" method="post" use:enhance class="btn">
-					<button formaction="/logout" type="submit" role="button">Logout</button>
+				<form action="?/logout" method="post" use:enhance>
+					<button type="submit">Logout</button>
 				</form>
 			{:else}
-				<a href="/login" class="btn">go to login</a>
+				<a href="/login">Login</a>
 			{/if}
 		</div>
 	</div>

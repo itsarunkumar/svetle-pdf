@@ -1,5 +1,3 @@
-import { auth } from '$lib/server/lucia';
-import { redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/server/prisma';
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load({ locals }) {
@@ -19,10 +17,6 @@ export async function load({ locals }) {
 			files: true
 		}
 	});
-
-	// console.log(user);
-
-	// console.log(session.user);
 
 	return {
 		userId: session.user.userId,

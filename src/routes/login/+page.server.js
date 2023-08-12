@@ -3,6 +3,15 @@
 import { auth } from '$lib/server/lucia';
 import { redirect } from '@sveltejs/kit';
 
+/** @type {import('./$types').PageServerLoad} */
+export async function load({ locals }) {
+	const session = await locals.auth.validate();
+	if (session) {
+		throw redirect(303, '/');
+	}
+	return {};
+}
+
 // @ts-ignore
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -48,5 +57,6 @@ export const actions = {
 		} catch (error) {
 			console.log(error);
 		}
+		throw redirect(303, '/');
 	}
 };
