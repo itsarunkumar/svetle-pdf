@@ -1,10 +1,6 @@
 import { prisma } from '$lib/server/prisma';
 import { supabase } from '$lib/supabaseClient';
 import { redirect } from '@sveltejs/kit';
-// @ts-ignore
-import { generateUniqueId } from '$lib/helper';
-// @ts-ignore
-import { v4 as uuid } from 'uuid';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {
