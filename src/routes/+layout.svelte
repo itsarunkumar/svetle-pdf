@@ -13,17 +13,25 @@
 
 	export let data;
 
+	import { page } from '$app/stores';
+
 	$: ({ logedIn } = data);
+
+	console.log($page);
 </script>
 
 <svelte:head>
-	<title>haha</title>
+	<title>Reda</title>
 </svelte:head>
 
-<Navbar {logedIn} />
+{#if $page.route.id !== '/login'}
+	<Navbar {logedIn} />
+{/if}
 
 {#if $navigating}
 	<p>Loading....</p>
 {:else}
-	<slot />
+	<div class="w-full flex justify-center items-center flex-col">
+		<slot />
+	</div>
 {/if}
