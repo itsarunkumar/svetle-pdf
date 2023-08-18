@@ -2,14 +2,18 @@
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import * as pdfjsLib from 'pdfjs-dist';
-	export let url;
 
+	/**
+	 * @type {any}
+	 */
+	export let url;
 	let currentPage = writable(1);
 	let numPages = writable(0);
-
-	let textContent = writable(); // Use a writable store for text content
-
-	let file = url;
+	let textContent = writable();
+	/**
+	 * @type {HTMLCanvasElement}
+	 */
+	let canvas;
 
 	/**
 	 * @param {string | URL | import("pdfjs-dist/types/src/display/api").TypedArray | ArrayBuffer | import("pdfjs-dist/types/src/display/api").DocumentInitParameters} url
@@ -28,51 +32,60 @@
 			const page = await pdf.getPage(pageNumber);
 
 			const extractedTextContent = await page.getTextContent();
-			// const text = extractedTextContent.items.map((item) => item.str).join(' ');
 			const text = extractedTextContent;
 
-			console.log('text fro text', text);
+			textContent.set(text);
 
-			textContent.set(text); // Update the text content store
+			const scale = 1;
+			const viewport = page.getViewport({ scale });
 
-			console.log('PDF loaded', $textContent);
+			canvas.height = viewport?.height;
+			canvas.width = viewport?.width;
+
+			const renderContext = canvas.getContext('2d');
+			const renderViewport = { canvasContext: renderContext, viewport };
+			await page.render(renderViewport);
 		} catch (error) {
 			console.error('PDF loading error:', error);
 		}
 	}
 
 	onMount(() => {
-		loadPdf(file, 1);
+		loadPdf(url, 1);
 	});
 
 	async function handlePreviousPage() {
 		if ($currentPage > 1) {
 			currentPage.update((n) => n - 1);
-			await loadPdf(file, $currentPage - 1);
+			await loadPdf(url, $currentPage - 1);
 		}
 	}
 
 	async function handleNextPage() {
 		if ($currentPage < $numPages) {
 			currentPage.update((n) => n + 1);
-			await loadPdf(file, $currentPage + 1);
+			await loadPdf(url, $currentPage + 1);
 		}
 	}
 </script>
 
-<div class=" flex justify-center items-center flex-col sm:flex-col">
+<div class="flex justify-center items-center flex-col sm:flex-col">
 	<div class="h-screen flex justify-center items-center flex-col sm:flex-col">
 		{#if $textContent && $textContent.items}
 			<div class="w-full overflow-x-auto max-w-screen-lg">
 				<div class="p-4 bg-gray-100 text-gray-900 shadow-md rounded-lg">
-					{#each $textContent.items as item}
-						<p
-							class="font-serif whitespace-no-wrap mb-2"
-							style="transform: matrix(1, 0, 0, 1, ${item.transform[4]}, ${item.transform[5]})"
-						>
-							{item.str}
-						</p>
-					{/each}
+					{#if $textContent.items.length === 0}
+						<canvas bind:this={canvas} id="the-canvas" class="" />
+					{:else}
+						{#each $textContent.items as item}
+							<p
+								class="font-serif whitespace-no-wrap mb-2"
+								style="transform: matrix(1, 0, 0, 1, ${item.transform[4]}, ${item.transform[5]})"
+							>
+								{item.str}
+							</p>
+						{/each}
+					{/if}
 				</div>
 			</div>
 		{:else}
@@ -84,19 +97,23 @@
 		<button
 			on:click={handlePreviousPage}
 			class="px-4 py-[6px] rounded bg-green-500"
-			disabled={$currentPage === 1}>Prev</button
+			disabled={$currentPage === 1}
 		>
+			Prev
+		</button>
 		{$currentPage}/{$numPages}
 		<button
 			on:click={handleNextPage}
 			class="px-4 py-[6px] rounded bg-green-500"
-			disabled={$currentPage === $numPages}>Next</button
+			disabled={$currentPage === $numPages}
 		>
+			Next
+		</button>
 	</div>
 </div>
 
 <style>
 	#text-content {
-		white-space: pre-line; /* Preserve line breaks and spaces in the text */
+		white-space: pre-line;
 	}
 </style>

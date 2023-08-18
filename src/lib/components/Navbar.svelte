@@ -14,6 +14,7 @@
 
 		<div class="flex gap-4">
 			<a href="/books">Go to Books</a>
+			<a href="/books/text">Go to Text</a>
 			<a href="/">Home</a>
 
 			{#if logedIn}
